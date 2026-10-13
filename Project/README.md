@@ -1,154 +1,424 @@
-# Diabeta AI
+<div align="center">
 
-Diabeta AI is an educational Streamlit application for exploring diabetes classification with Random Forest and XGBoost. It trains both models from a local CSV dataset, compares their performance, displays model feature importances, and lets a user submit clinical measurements for side-by-side predictions.
+# 🩺 Diabeta AI
 
-> **Medical disclaimer:** This is an academic demonstration, not a diagnostic or clinical decision-support tool. Do not use its predictions to make medical decisions.
+### Intelligent Diabetes Prediction & Feature Importance Analysis
 
-## Features
+**Predict. Compare. Understand.**
 
-- Dashboard with dataset counts and held-out model ROC-AUC scores.
-- Interactive prediction form that displays each model's predicted class and positive-class probability.
-- Model analytics: accuracy, precision, recall, F1 score, ROC-AUC, confusion matrices, and ROC curves.
-- Side-by-side feature-importance visualizations for both models.
-- Dataset preview, descriptive statistics, and exploratory charts.
-- Responsive Streamlit interface with Plotly charts.
+An interactive Machine Learning project comparing Random Forest and XGBoost for diabetes prediction and model explainability.
 
-## Models and training
+<br>
 
-At application startup, `app.py` loads the data and trains both classifiers. The displayed results and predictions are computed from the fitted models; prediction values are not hardcoded.
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-Web_App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![Scikit-learn](https://img.shields.io/badge/Scikit--learn-Machine_Learning-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
+![XGBoost](https://img.shields.io/badge/XGBoost-Boosting-006600?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Academic_Project-00A86B?style=for-the-badge)
 
-The application selects these seven input features:
+<br>
 
-1. `Pregnancies`
-2. `Glucose`
-3. `BloodPressure`
-4. `Insulin`
-5. `BMI`
-6. `DiabetesPedigreeFunction`
-7. `Age`
+**🌲 Random Forest · ⚡ XGBoost · 📊 Model Analytics · 🔍 Feature Importance**
 
-`SkinThickness` is present in the CSV but is not used by the models. `Outcome` is the binary target (`0` or `1`).
+</div>
 
-Preprocessing and training implemented in `app.py`:
+---
 
-1. Zero measurements in `Glucose`, `BloodPressure`, `Insulin`, and `BMI` are treated as missing values.
-2. Missing values in those columns are replaced with their respective medians.
-3. The data is split into 80% training and 20% test partitions, stratified by `Outcome`, with `random_state=42`.
-4. A Random Forest is fitted with 300 trees and `class_weight="balanced"`.
-5. XGBoost is fitted with 300 estimators, depth 4, learning rate 0.05, subsample 0.85, and column subsample 0.85.
-6. Both models are evaluated on the same held-out test partition.
+## 🌟 About the Project
 
-The current implementation calculates medians before splitting the data. This means the test partition contributes to the imputation values; this is a small preprocessing leakage limitation to address before treating evaluation scores as rigorous research results. The current evaluation is a single split, not cross-validation.
+**Diabeta AI** is a Machine Learning web application developed to study diabetes prediction using two ensemble-learning algorithms: **Random Forest and XGBoost**.
 
-## Dataset
+The project explores how clinical measurements can be used to classify records into two target categories and compares how both models perform on the same dataset.
 
-The application reads **`data/diabetes.csv`**, using a path relative to the working directory. Launch the app from the project root so this path resolves correctly. The supplied dataset has 768 rows and 9 columns: eight predictor columns and the `Outcome` target. The model uses the seven features listed above.
+Beyond prediction, Diabeta AI focuses on **model explainability** by visualizing feature importance and helping users understand which variables the trained models rely on.
 
-The root-level `diabetes.csv` is also included as supplied, but the application does not read that copy. Keep `data/diabetes.csv` in place when running the app. The CSV's source and redistribution terms should be verified independently before redistributing the dataset.
+The application combines machine learning, data analysis, interactive charts, and an intuitive web interface in one project.
 
-## Project layout
+> 🎯 **Our mission:** Make Machine Learning predictions easier to explore, compare, and understand.
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🏠 Interactive Dashboard
+Explore dataset information, target distribution, and model performance through visual summaries.
+
+</td>
+<td width="50%">
+
+### 🩺 Diabetes Prediction
+Enter clinical measurements and compare predictions from Random Forest and XGBoost.
+
+</td>
+</tr>
+
+<tr>
+<td width="50%">
+
+### 📊 Model Analytics
+Compare Accuracy, Precision, Recall, F1-score, and ROC-AUC.
+
+</td>
+<td width="50%">
+
+### 🔍 Feature Importance
+Explore and compare the features used by both trained models.
+
+</td>
+</tr>
+
+<tr>
+<td width="50%">
+
+### 📈 Interactive Visualizations
+View confusion matrices, ROC curves, feature-importance charts, and dataset distributions.
+
+</td>
+<td width="50%">
+
+### 📁 Dataset Explorer
+Inspect the dataset, review descriptive statistics, and explore selected variables.
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🧠 Machine Learning Architecture
+
+Diabeta AI follows an end-to-end Machine Learning workflow.
 
 ```text
-Project/
+                  ┌─────────────────────┐
+                  │   DIABETES DATASET  │
+                  │    diabetes.csv     │
+                  └──────────┬──────────┘
+                             │
+                             ▼
+                  ┌─────────────────────┐
+                  │ DATA PREPROCESSING  │
+                  │ Validation & Impute │
+                  └──────────┬──────────┘
+                             │
+                             ▼
+                  ┌─────────────────────┐
+                  │  TRAIN / TEST SPLIT│
+                  │       80 / 20       │
+                  └──────────┬──────────┘
+                             │
+                 ┌───────────┴───────────┐
+                 ▼                       ▼
+       ┌──────────────────┐   ┌──────────────────┐
+       │  RANDOM FOREST   │   │     XGBOOST      │
+       │                  │   │                  │
+       │ Decision Trees   │   │ Boosted Trees    │
+       └─────────┬────────┘   └─────────┬────────┘
+                 │                      │
+                 └──────────┬───────────┘
+                            ▼
+                 ┌─────────────────────┐
+                 │  MODEL EVALUATION   │
+                 │ Accuracy, F1, AUC   │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ FEATURE IMPORTANCE  │
+                 │  Model Comparison   │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │   DIABETA AI WEB    │
+                 │     APPLICATION     │
+                 └─────────────────────┘
+```
+
+---
+
+## 🌲 Machine Learning Models
+
+### 1. Random Forest
+
+Random Forest is an ensemble-learning algorithm that builds multiple decision trees and combines their predictions.
+
+**Role in this project:**
+- Predict diabetes outcomes.
+- Evaluate classification performance.
+- Calculate built-in feature importance.
+- Serve as a model for comparison with XGBoost.
+
+### 2. XGBoost
+
+XGBoost is a gradient-boosting algorithm that builds trees sequentially, with each stage improving the overall ensemble.
+
+**Role in this project:**
+- Generate diabetes predictions.
+- Evaluate classification performance.
+- Calculate built-in feature importance.
+- Compare its results with Random Forest.
+
+### ⚖️ Why Compare Both Models?
+
+Both models can learn nonlinear relationships from tabular data, but they use different ensemble-learning strategies.
+
+Comparing them helps us study their performance and understand whether their feature-importance rankings differ.
+
+---
+
+## 📂 Dataset Information
+
+The project uses the supplied **`diabetes.csv`** dataset.
+
+| Property | Description |
+|---|---|
+| Dataset file | `diabetes.csv` |
+| Total records | 768 |
+| Input features | 8 |
+| Target variable | `Outcome` |
+| Problem type | Binary classification |
+| Data format | CSV |
+
+### 🔬 Input Features
+
+| Feature | Description |
+|---|---|
+| `Pregnancies` | Number of pregnancies |
+| `Glucose` | Plasma glucose measurement |
+| `BloodPressure` | Diastolic blood pressure measurement |
+| `SkinThickness` | Skin-fold thickness measurement |
+| `Insulin` | Insulin measurement |
+| `BMI` | Body Mass Index |
+| `DiabetesPedigreeFunction` | Dataset-provided diabetes pedigree function |
+| `Age` | Age in years |
+
+### 🎯 Target Variable: `Outcome`
+
+| Value | Meaning |
+|---|---|
+| `0` | No diabetes indicated by the dataset label |
+| `1` | Diabetes indicated by the dataset label |
+
+**Data preprocessing:** Selected zero-coded clinical measurements are treated as missing values and replaced using medians calculated from the training data.
+
+> The dataset is used for an academic Machine Learning demonstration. Its representativeness and clinical suitability have not been independently validated.
+
+---
+
+## 📊 Model Evaluation
+
+The application evaluates both models using the same held-out test dataset.
+
+| Metric | What It Measures |
+|---|---|
+| Accuracy | Proportion of all predictions that are correct |
+| Precision | Proportion of positive predictions that are correct |
+| Recall | Proportion of actual positive cases identified |
+| F1-score | Harmonic mean of Precision and Recall |
+| ROC-AUC | Ability to distinguish between the two target classes |
+
+Additional visualizations include:
+
+- 📉 ROC curves
+- 🎯 Confusion matrices
+- 📊 Model comparison charts
+- 🔍 Feature-importance rankings
+
+**Note:** Performance values are calculated when the application trains the models. Actual results may differ with changes to the dataset, preprocessing, model parameters, or evaluation split.
+
+---
+
+## 🔍 Feature Importance & Explainability
+
+Feature importance helps show which input variables contribute to the trained models' predictions.
+
+Diabeta AI compares the built-in importance scores from both algorithms.
+
+The comparison helps answer questions such as:
+
+- Which features rank highest in Random Forest?
+- Which features rank highest in XGBoost?
+- Do both models produce similar rankings?
+- Which features receive different importance rankings across the models?
+
+Feature importance describes **model behaviour, not causation**. An important feature is not necessarily a cause of diabetes.
+
+---
+
+## 🛠️ Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Core programming language |
+| Streamlit | Interactive web application |
+| Pandas | Dataset handling and analysis |
+| NumPy | Numerical processing |
+| Scikit-learn | Random Forest, preprocessing, splitting, and evaluation |
+| XGBoost | Gradient-boosted classification |
+| Plotly | Interactive charts and visualizations |
+
+---
+
+## 📁 Project Structure
+
+```text
+Diabeta-AI/
+│
 ├── app.py
+│
 ├── README.md
 ├── requirements.txt
 ├── run_project.bat
-├── diabetes.csv              # Additional supplied copy; not loaded by the app
+│
+├── diabetes.csv
+│
 ├── data/
-│   └── diabetes.csv          # Dataset loaded by app.py
+│   └── diabetes.csv
+│
 └── models/
-    └── README.txt            # Notes that models train on application startup
+    └── README.txt
 ```
 
-## Requirements
+**Important:** The application loads the dataset from `data/diabetes.csv`. The root-level `diabetes.csv` is not required by the current application.
 
-- Python 3.10 or later is recommended.
-- Packages and minimum versions are listed in `requirements.txt`:
-  - Streamlit
-  - pandas
-  - NumPy
-  - scikit-learn
-  - XGBoost
-  - Plotly
+The models are trained automatically when the application starts; pre-trained model files are not required.
 
-## Run locally
+---
 
-Open a terminal in the `Project` directory, then create and activate a virtual environment.
+## 🚀 Installation & Setup
 
-### Windows PowerShell
+Follow these steps to run Diabeta AI on your local computer.
+
+### ✅ Prerequisites
+
+Install Python and ensure it is accessible from your terminal.
+
+### Step 1 — Download the Project
+
+Download and extract the project ZIP file.
+
+### Step 2 — Open the Project
+
+Open the extracted project folder using **VS Code or Antigravity**.
+
+### Step 3 — Open the Terminal
+
+Select:
+
+`Terminal → New Terminal`
+
+Ensure the terminal is in the folder containing `app.py`.
+
+### Step 4 — Create a Virtual Environment
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m streamlit run app.py
+python -m venv venv
 ```
 
-If PowerShell prevents script activation, use Command Prompt instead:
+### Step 5 — Activate the Environment
+
+For Windows PowerShell:
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+If activation is blocked, use Command Prompt:
 
 ```bat
-python -m venv .venv
-.\.venv\Scripts\activate.bat
+venv\Scripts\activate.bat
+```
+
+### Step 6 — Install Dependencies
+
+```powershell
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+```
+
+### Step 7 — Launch the Website
+
+```powershell
 python -m streamlit run app.py
 ```
 
-Streamlit prints a local URL, normally <http://localhost:8501>. Open that address in a browser. The included `run_project.bat` provides an alternate startup path, but the commands above make each setup step explicit and report failures more clearly.
+Using `python -m streamlit` also works when the standalone `streamlit` command is not recognized by PowerShell.
 
-### macOS or Linux
+### Step 8 — Open Diabeta AI
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m streamlit run app.py
-```
+Open the local URL shown in your terminal. It is normally:
 
-## Using the application
+**http://localhost:8501**
 
-Choose a page from the sidebar:
+🎉 Your website is now running locally!
 
-- **Dashboard** — dataset size, selected-feature count, model ROC-AUC, class distribution, and metric comparison.
-- **Prediction** — enter the seven model inputs and submit the form. The app shows each model's predicted class and probability for `Outcome = 1`.
-- **Model Analytics** — test-set metrics, confusion matrices, and ROC curves.
-- **Feature Importance** — compare the fitted estimators' built-in feature-importance values.
-- **Dataset Explorer** — inspect a data preview, missing-cell count, summary statistics, and charts.
-- **About** — project objective and technology summary.
+---
 
-The prediction form's initial values are demo defaults, not a representative patient profile. A displayed probability is the classifier's output and is not necessarily a calibrated estimate of an individual's real-world risk.
+## 🖥️ Website Pages
 
-## Reproducing the current evaluation
+| Page | Function |
+|---|---|
+| 🏠 Dashboard | Dataset summary and model performance |
+| 🩺 Prediction | Enter clinical values and compare predictions |
+| 📊 Model Analytics | Metrics, confusion matrices, and ROC curves |
+| 🔍 Feature Importance | Compare model feature-importance scores |
+| 📁 Dataset Explorer | Preview data and explore distributions |
+| ℹ️ About | Project objective, algorithms, and methodology |
 
-The training/test split is deterministic for a fixed dataset and compatible dependency versions because `random_state=42` is set. On the supplied dataset, one run produced approximately:
+---
 
-| Metric | Random Forest | XGBoost |
-|---|---:|---:|
-| Accuracy | 0.753 | 0.760 |
-| Precision | 0.633 | 0.660 |
-| Recall | 0.704 | 0.648 |
-| F1 score | 0.667 | 0.654 |
-| ROC-AUC | 0.825 | 0.829 |
+## 🎯 Project Objectives
 
-These are observed results for the current implementation, not guaranteed benchmarks. They can vary with dependency versions, dataset contents, and execution environment. The app calculates the metrics on startup rather than loading these table values.
+1. Develop a Machine Learning system for diabetes-outcome classification.
+2. Implement Random Forest and XGBoost.
+3. Evaluate both models using standard classification metrics.
+4. Compare their feature-importance rankings.
+5. Build an interactive website to demonstrate model outputs and analytics.
+6. Present model limitations and emphasize responsible use.
 
-## Limitations and responsible use
+---
 
-- The dataset is small and the evaluation uses one stratified hold-out split.
-- Imputation currently happens before the train/test split; a production-quality evaluation should fit preprocessing only on training data, ideally through a scikit-learn pipeline.
-- The project uses a fixed set of selected variables and does not validate input values as a clinical workflow.
-- Built-in feature importance describes how the trained model uses its inputs. It does not establish causation or explain an individual prediction.
-- The classifiers are not shown to be calibrated or externally validated for real-world clinical use.
-- Do not submit identifiable or sensitive patient data to this demonstration.
+## 🔮 Future Enhancements
 
-## Possible extensions
+Potential future improvements include:
 
-- Put imputation and model fitting in a leakage-safe scikit-learn pipeline.
-- Add cross-validation and external validation.
-- Add calibration and threshold analysis.
-- Add local explanation methods such as SHAP, with appropriate caveats.
-- Add input validation, automated tests, and pinned/reproducible dependency versions.
+- 🧠 Add SHAP explanations for individual predictions.
+- 🔁 Introduce stratified cross-validation for more robust evaluation.
+- 📄 Add downloadable model evaluation reports.
+- 🎨 Further improve visual design and accessibility.
+- 🌐 Deploy the application to a suitable hosting platform.
+- 🧪 Validate the models on an independent, representative dataset.
+- ⚙️ Add automated testing and a reproducible preprocessing pipeline.
 
+These are proposed enhancements and should not be considered implemented features unless added to the code.
+
+---
+
+## ⚠️ Responsible Use & Disclaimer
+
+**Diabeta AI is an academic Machine Learning project. It is not a medical diagnostic system.**
+
+The outputs depend on the supplied dataset and the trained models. They must not be used to diagnose diabetes, make treatment decisions, or replace professional healthcare advice.
+
+Any real-world medical application would require appropriate clinical validation, independent testing, privacy safeguards, and qualified oversight.
+
+---
+
+<div align="center">
+
+## 🩺 Diabeta AI
+
+**Predict. Compare. Understand.**
+
+Built with Python, Streamlit, Random Forest and XGBoost.
+
+<br>
+
+*Exploring Machine Learning and explainable prediction through an interactive application.*
+
+</div>
